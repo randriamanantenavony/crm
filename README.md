@@ -41,8 +41,6 @@ Replace `YourUserName` and `YourPassword` with your MySQL database credentials.
         - `http://localhost:8080/employee/settings/handle-granted-access`
         Replace `localhost:8080` with the base URL of your CRM application.
     - Complete the setup and note down the **Client ID** and **Client Secret**.
-
-    
 2. **Modify the Google API scopes for accessing Google services**:
     
     While setting up the Google API credentials, you need to add the required scopes to define the level of access the application has to your Google account. The required scopes depend on the specific features you want to use. Here are the scopes for common Google services:
