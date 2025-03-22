@@ -87,7 +87,7 @@
                     </a>
                     <ul th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="collapse">
                         <li><a th:href="${ home + 'admin/db/reinitialiser' }">Reset</a></li>
-                        <li><a th:href="${home + 'manager/register-user'}">Create user</a></li>
+                        <li><a th:href="${home + 'generate/data_managing/page'}">Generate</a></li>
                     </ul>
                 </li>
 
