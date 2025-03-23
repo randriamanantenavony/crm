@@ -47,7 +47,7 @@ public class DepenseController {
     }
 
     @PostMapping("/save")
-    public String saveDepense(@RequestParam String description,
+    public String saveDepense(@RequestParam(required = false) String description,
                               @RequestParam(required = false) Double montant,
                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String dateDepense, 
                               @RequestParam(required = false) Integer ticketId,
@@ -101,18 +101,59 @@ public class DepenseController {
         System.out.println("resultat : " + alert.getTotalDepense().compareTo(alert.getAlertThresholdValue()));
         System.out.println("signe final : " + alert.getAlertTriggered());
 
-          if (alert != null && alert.getTotalDepense().compareTo(alert.getAlertThresholdValue()) > 0) {
+        if (alert != null && alert.getTotalDepense().compareTo(alert.getAlertThresholdValue()) > 0) {
         System.out.println("seuil depasse");
         redirectAttributes.addFlashAttribute("budgetAlert", alert);  
         
        } 
        
+       // Vérification dépassement du BUDGET TOTAL (et non seuil d'alerte)
+    if (alert != null && alert.getTotalDepense().compareTo(alert.getTotalBudget()) > 0) {
+        System.out.println("🚨 Dépassement du BUDGET TOTAL détecté");
+        redirectAttributes.addFlashAttribute("depense", depense);
+
+        return "redirect:/depense/confirm";
+    }
+
+
         redirectAttributes.addFlashAttribute("seuilDepasse", true);
 
         // Rediriger vers la liste des dépenses
         return "redirect:/depense/list";
     }
         
+
+    @GetMapping("/confirm")
+    public String confirmDepense() {
+        return "depense/confirm_depense"; // ou "confirm.jsp" si tu es en JSP
+    }
+
+    @PostMapping("/confirm_reponse")
+    public String confirmDepense(
+        @RequestParam("description") String description,
+        @RequestParam("montant") Double montant,
+        @RequestParam("dateDepense") Date dateDepense,
+        @RequestParam(value="ticketId", required = false) Integer ticketId,
+        @RequestParam(value = "leadId", required = false) Integer leadId,  // Paramètre optionnel
+        @RequestParam("depenseId") Integer depenseId,
+        @RequestParam("confirmDepense") String confirmDepense) {
+
+        // Vérifie si la dépense a été confirmée
+        if ("yes".equals(confirmDepense)) {
+            return "redirect:/depense/form";
+        } else if ("no".equals(confirmDepense)) {
+            // Si l'utilisateur annule la dépense, on la supprime de la base de données
+            System.out.println("Suppression de la dépense : " + depenseId);
+            depenseService.deleteDepense(depenseId);
+
+            // Redirige vers une page d'annulation
+            return "redirect:/depense/form";
+        }
+
+        // Redirige vers une page par défaut en cas de non-confirmation
+        return "redirect:/depense/form";
+    }
+
 
     // Afficher toutes les dépenses
     @GetMapping("/list")

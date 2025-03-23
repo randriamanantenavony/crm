@@ -22,11 +22,11 @@ public class Depense {
     @Column(name = "date_depense")
     private Date dateDepense;
 
-    @ManyToOne
     @JoinColumn(name = "lead_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Lead lead;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
