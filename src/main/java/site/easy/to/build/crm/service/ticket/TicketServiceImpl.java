@@ -90,4 +90,9 @@ public class TicketServiceImpl implements TicketService{
     public void deleteAllByCustomer(Customer customer) {
         ticketRepository.deleteAllByCustomer(customer);
     }
+
+    public Ticket findById(Integer ticketId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
 }
