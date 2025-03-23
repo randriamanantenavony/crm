@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de Dépense</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+        .alert {
+            background-color: #ffe0e0;
+            color: #b30000;
+            border: 1px solid #b30000;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            margin: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .btn-yes {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-no {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="alert">
+    <h2>Attention ⚠️</h2>
+    <p>
+        Le total des dépenses 
+        (<strong th:text="${budgetAlert.totalDepense}"></strong>) dépasse le budget autorisé 
+        (<strong th:text="${budgetAlert.totalBudget}"></strong>).
+    </p>
+    <p>Voulez-vous quand même enregistrer cette dépense ?</p>
+</div>
+
+<!-- Formulaire pour confirmer la dépense -->
+<form th:action="@{/depense/confirm_reponse}" method="post">
+    <!-- Champs cachés pour envoyer les données -->
+    <input type="hidden" name="description" th:value="${depense.description}">
+    <input type="hidden" name="montant" th:value="${depense.montant}">
+    <input type="hidden" name="dateDepense" th:value="${depense.dateDepense}">
+    <input type="hidden" name="ticketId" th:value="${depense.ticket != null} ? ${depense.ticket.ticketId} : ''">
+    <input type="hidden" name="leadId" th:value="${depense.lead != null} ? ${depense.lead.leadId} : ''">
+    <input type="hidden" name="depenseId" th:value="${depense.id}">  <!-- ID de la dépense pour confirmation -->
+
+    <!-- Boutons de confirmation -->
+    <button class="btn btn-yes" type="submit" name="confirmDepense" value="yes">Oui, continuer</button>
+    <button class="btn btn-no" type="submit" name="confirmDepense" value="no">Non, annuler</button>
+</form>
+
+</body>
+</html>
