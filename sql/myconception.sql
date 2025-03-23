@@ -15,26 +15,24 @@ CREATE TABLE IF NOT EXISTS Budget (
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Expense (
-    expense_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
-);
 
--- Table Expense (Dépenses globales)
-CREATE TABLE IF NOT EXISTS Expense (
-    expense_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
-    type VARCHAR(50) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
-);
+CREATE TABLE IF NOT EXISTS `depense` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `montant` DECIMAL(10,2) NOT NULL,
+  `description` TEXT,
+  `date_depense` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `lead_id` INT UNSIGNED DEFAULT NULL,
+  `ticket_id` INT UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_depense_lead` (`lead_id`),
+  KEY `fk_depense_ticket` (`ticket_id`),
+  CONSTRAINT `fk_depense_lead` FOREIGN KEY (`lead_id`) REFERENCES `trigger_lead` (`lead_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_depense_ticket` FOREIGN KEY (`ticket_id`) REFERENCES `trigger_ticket` (`ticket_id`) ON DELETE CASCADE,
+  CONSTRAINT `chk_one_reference_only` CHECK (
+    (lead_id IS NOT NULL AND ticket_id IS NULL) OR
+    (lead_id IS NULL AND ticket_id IS NOT NULL)
+  )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Table Alert (Alertes)
 CREATE TABLE IF NOT EXISTS Alert (
