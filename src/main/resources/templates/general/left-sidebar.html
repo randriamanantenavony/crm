@@ -78,6 +78,42 @@
                         </li>
                     </ul>
                 </li>
+
+                <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="nav-small-cap">--- Data</li>
+                <li>
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-users"></i>
+                        <span class="hide-menu">Data manager</span>
+                    </a>
+                    <ul th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="collapse">
+                        <li><a th:href="${ home + 'admin/db/reinitialiser' }">Reset</a></li>
+                        <li><a th:href="${home + 'generate/data_managing/page'}">Generate</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-users"></i>
+                        <span class="hide-menu">--- Budget</span>
+                    </a>
+                    <ul th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="collapse">
+                        <li><a th:href="${ home + 'admin/budget/new' }">Create</a></li>
+                        <li><a th:href="${home + 'admin/budget/list'}">List</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-users"></i>
+                        <span class="hide-menu">--- Depense</span>
+                    </a>
+                    <ul th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="collapse">
+                        <li><a th:href="${ home + 'depense/form' }">Create</a></li>
+                        <li><a th:href="${home + 'depense/list'}">List</a></li>
+                    </ul>
+                </li>
+
+
                 <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="nav-small-cap">--- Users</li>
                 <li>
                     <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
@@ -209,6 +245,9 @@
                         <span class="hide-menu">My Contracts</span>
                     </a>
                 </li>
+
+              
+
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
