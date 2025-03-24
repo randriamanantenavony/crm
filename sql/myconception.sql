@@ -73,3 +73,7 @@ select count(*) from trigger_ticket;
 
 
 select sum(total_amount) from budget group by customer_id;
+
+select u.user_id,name,total_budget, total_depense
+from user_budget_alert u
+JOIN customer ON u.user_id = customer_id;
