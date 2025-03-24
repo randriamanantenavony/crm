@@ -67,9 +67,28 @@ LEFT JOIN (
 CROSS JOIN GlobalSettings gs;
 
 
+create or REPLACE view client_stat as
+select u.user_id,name,total_budget, total_depense
+from user_budget_alert u
+JOIN customer ON u.user_id = customer_id;
+
+CREATE VIEW ticket_status_counts AS
+SELECT status, COUNT(*) AS ticket_count
+FROM trigger_ticket
+GROUP BY status;
+
+
+CREATE VIEW lead_status_counts AS
+SELECT status, COUNT(*) AS lead_count
+FROM trigger_ticket
+GROUP BY status;
+
+
 select count(*) from customer;
 select count(*) from trigger_lead;
 select count(*) from trigger_ticket;
 
 
 select sum(total_amount) from budget group by customer_id;
+
+
