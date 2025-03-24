@@ -67,4 +67,9 @@ LEFT JOIN (
 CROSS JOIN GlobalSettings gs;
 
 
+select count(*) from customer;
+select count(*) from trigger_lead;
+select count(*) from trigger_ticket;
+
+
 select sum(total_amount) from budget group by customer_id;
