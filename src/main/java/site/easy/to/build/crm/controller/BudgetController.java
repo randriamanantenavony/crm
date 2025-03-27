@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import site.easy.to.build.crm.entity.Budget;
+import site.easy.to.build.crm.entity.BudgetInfo;
 import site.easy.to.build.crm.entity.Customer;
 import site.easy.to.build.crm.repository.CustomerRepository;
 import site.easy.to.build.crm.service.budget.BudgetService;
@@ -35,7 +36,8 @@ public class BudgetController {
 
     @GetMapping("/list")
     public String showBudgets(Model model) {
-        List<Budget> budgets = budgetService.findAll(); // ou findAllByAdmin(), selon ton besoin
+        // List<Budget> budgets = budgetService.findAll();
+        List<BudgetInfo> budgets = budgetService.getBudgetInfo(); 
         model.addAttribute("budgets", budgets);
         return "budget/liste"; // Si ton fichier est dans templates/admin/budget-list.html
     }
@@ -66,6 +68,7 @@ public class BudgetController {
     
         return "redirect:/admin/budget/list";
     }
+    
     
 
     

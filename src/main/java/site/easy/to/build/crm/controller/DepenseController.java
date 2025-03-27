@@ -2,6 +2,7 @@ package site.easy.to.build.crm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,8 @@ import site.easy.to.build.crm.entity.Depense;
 import site.easy.to.build.crm.entity.Lead;
 import site.easy.to.build.crm.entity.Ticket;
 import site.easy.to.build.crm.entity.UserBudgetAlert;
+import site.easy.to.build.crm.repository.LeadRepository;
+import site.easy.to.build.crm.repository.TicketRepository;
 import site.easy.to.build.crm.service.depense.DepenseService;
 import site.easy.to.build.crm.service.depense.UserBudgetAlertService;
 import site.easy.to.build.crm.service.lead.LeadServiceImpl;
@@ -36,6 +39,12 @@ public class DepenseController {
 
     @Autowired
     private UserBudgetAlertService userBudgetAlertService;
+
+    @Autowired
+    private TicketRepository ticketR;
+
+    @Autowired
+    private LeadRepository leadR;
 
     // Afficher le formulaire
     @GetMapping("/form")
@@ -62,6 +71,7 @@ public class DepenseController {
         depense.setDescription(description);
         depense.setMontant(montant != null ? montant : 0);
         Customer customer = null;
+        int id_customer = 0;
         Ticket ticket = null;
         Lead lead = null;
     
@@ -73,15 +83,18 @@ public class DepenseController {
         // Récupérer le Customer via le Lead ou le Ticket
         if (ticketId != null) {
             ticket = ticketRepository.findByTicketId(ticketId);  // Récupérer le Ticket avec son ID
+             System.out.println("ticket : " + ticket.getTicketId());
             if (ticket != null) {
-                customer = ticket.getCustomer();  // Récupérer le Customer associé au Ticket
+                id_customer = ticketR.findCustomerIdByTicketIdNative(ticket.getTicketId());  
+                System.out.println("customer id: " + id_customer);
             }
         }
     
         if (leadId != null) {
             lead = leadRepository.findByLeadId(leadId);  // Récupérer le Lead avec son ID
+            System.out.println("lead : " + lead.getLeadId());
             if (lead != null) {
-                customer = lead.getCustomer();  // Récupérer le Customer associé au Lead
+                id_customer = leadR.findCustomerIdByleadIdNative(lead.getLeadId()); 
             }
         }
 
@@ -89,11 +102,10 @@ public class DepenseController {
         depense.setTicket(ticket);
     
         // Sauvegarder la dépense si l'utilisateur a confirmé ou si le budget est respecté
-        depenseService.save(depense);
+         depenseService.save(depense);
 
-        System.out.println("customer id : " + customer.getCustomerId());
         // Obtenir l'alerte du budget de l'utilisateur
-        UserBudgetAlert alert = userBudgetAlertService.getUserBudgetAlert(customer.getCustomerId());
+        UserBudgetAlert alert = userBudgetAlertService.getUserBudgetAlert(id_customer);
 
         System.out.println("total depense : " + alert.getTotalDepense());
         System.out.println("total budget : " + alert.getTotalBudget());
@@ -162,4 +174,23 @@ public class DepenseController {
         model.addAttribute("depenses", depenses);
         return "depense/depense_list";
     }
+
+    @DeleteMapping("/api/delete/{id}")
+    public void deleteDepense(@PathVariable("id") int idDepense){
+        depenseService.deleteDepense(idDepense);
+    }
+
+    
+    @DeleteMapping("/api/delete_lead/{id}")
+    public void deleteLead(@PathVariable("id") int idLead){
+        depenseService.deleteDepense(idLead);
+    }
+
+
+    @PutMapping("/api/update_ticket_montant")
+    public ResponseEntity<String> updateMontant(@RequestParam("id") int id, @RequestParam("montant") double montant) {
+        depenseService.updateMontantParTicket(id, montant);
+        return ResponseEntity.ok("Montant mis à jour !");
+    }
+
 }

@@ -38,11 +38,11 @@ CREATE TABLE IF NOT EXISTS `depense` (
 -- cree une vue pour l'alerte
 CREATE OR REPLACE VIEW user_budget_alert AS
 SELECT 
-    c.customer_id AS user_id,
-    IFNULL(b.total_budget, 0) AS total_budget,
-    IFNULL(d.total_depense, 0) AS total_depense,
-    (IFNULL(b.total_budget, 0) * gs.alert_threshold / 100) AS alert_threshold_value,
-    (IFNULL(d.total_depense, 0) > (IFNULL(b.total_budget, 0) * gs.alert_threshold / 100)) AS alert_triggered
+    c.customer_id AS userId,
+    IFNULL(b.total_budget, 0) AS totalBudget,
+    IFNULL(d.total_depense, 0) AS totalDepense,
+    (IFNULL(b.total_budget, 0) * gs.alert_threshold / 100) AS alertThresholdValue,
+    (IFNULL(d.total_depense, 0) > (IFNULL(b.total_budget, 0) * gs.alert_threshold / 100)) AS alertTriggered
 FROM 
     customer c
 LEFT JOIN (
@@ -68,9 +68,9 @@ CROSS JOIN GlobalSettings gs;
 
 
 create or REPLACE view client_stat as
-select u.user_id,name,total_budget, total_depense
+select u.userId as user_id,name,totalBudget as total_budget, totalDepense as total_depense
 from user_budget_alert u
-JOIN customer ON u.user_id = customer_id;
+JOIN customer ON u.userId = customer_id;
 
 CREATE VIEW ticket_status_counts AS
 SELECT status, COUNT(*) AS ticket_count
@@ -78,10 +78,19 @@ FROM trigger_ticket
 GROUP BY status;
 
 
-CREATE VIEW lead_status_counts AS
+CREATE OR REPLACE  VIEW lead_status_counts AS
 SELECT status, COUNT(*) AS lead_count
-FROM trigger_ticket
+FROM trigger_lead
 GROUP BY status;
+
+create or replace view v_detail_budget as 
+select budget_id as budgetId,c.customer_id as customerId,c.name,total_amount as totalAmount,date_ajout as dateAjout,email as customerEmail
+from budget b 
+join customer c on b.customer_id = c.customer_id;
+
+
+create or replace view v_total as
+ select sum(totatl_amount) from budget
 
 
 select count(*) from customer;
@@ -89,6 +98,17 @@ select count(*) from trigger_lead;
 select count(*) from trigger_ticket;
 
 
-select sum(total_amount) from budget group by customer_id;
+create or replace view v_total as 
+select sum(total_amount) as total_budget from budget group by customer_id,
+select sum(montant) as somme _depense from depense;
 
 
+
+
+-- 1. Insérer un Lead
+INSERT INTO trigger_lead (customer_id, user_id, name, phone, employee_id, status, meeting_id, google_drive, google_drive_folder_id, created_at)
+VALUES (1, 2, 'John Doe', '123-456-7890', 3, 'Active', 'meeting123', 1, 'folder123', NOW());
+
+-- 2. Insérer une Depense pour le Lead récemment inséré
+INSERT INTO depense (montant, description, date_depense, lead_id)
+VALUES (100.00, 'Achat de fournitures', NOW(), 1);

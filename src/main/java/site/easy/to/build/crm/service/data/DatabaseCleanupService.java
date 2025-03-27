@@ -13,7 +13,7 @@ public class DatabaseCleanupService {
     private JdbcTemplate jdbcTemplate;
 
     // Liste des tables à exclure
-    private static final List<String> EXCLUDED_TABLES = List.of("roles", "users", "user_roles");
+    private static final List<String> EXCLUDED_TABLES = List.of("roles", "users", "user_roles","globalsettings","client_stat","user_budget_alert","lead_status_counts","v_detail_budget","ticket_status_counts");
 
     public void truncateAllTablesExceptExcluded() {
         // Obtenir les noms des tables

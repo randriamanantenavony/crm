@@ -15,18 +15,14 @@
             <tr>
                 <th>ID</th>
                 <th>Client</th>
-                <th>Description</th>
                 <th>Montant</th>
-                <th>Date d'ajout</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="budget : ${budgets}">
                 <td th:text="${budget.budgetId}">1</td>
-                <td th:text="${budget.customer.name}">Nom Client</td>
-                <td th:text="${budget.name}">Description</td>
+                <td th:text="${budget.customerEmail}">MailClient</td>
                 <td th:text="${#numbers.formatDecimal(budget.totalAmount, 1, 'COMMA', 2, 'POINT')} + ' €'">100.00 €</td>
-                <td th:text="${#dates.format(budget.dateAjout, 'yyyy-MM-dd')}">2025-03-23</td>      
             </tr>
             <tr th:if="${#lists.isEmpty(budgets)}">
                 <td colspan="6" class="text-center">Aucun budget enregistré.</td>
