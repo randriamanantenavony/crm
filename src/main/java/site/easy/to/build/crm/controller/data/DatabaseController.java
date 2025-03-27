@@ -24,7 +24,7 @@ public class DatabaseController {
     public String truncateDatabase(Model model) {
         cleanupService.truncateAllTablesExceptExcluded();
         model.addAttribute("message", "Base de données nettoyée avec succès (sauf roles, users, user_roles).");
-        return "data/reinitialiser"; // le fichier HTML à afficher
+        return "data/reset"; // le fichier HTML à afficher
     }
 
 }

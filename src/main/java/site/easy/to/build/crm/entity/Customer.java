@@ -46,7 +46,6 @@ public class Customer {
     private String state;
 
     @Column(name = "country")
-    @NotBlank(message = "Country is required", groups = {Default.class, CustomerUpdateValidationGroupInclusion.class})
     private String country;
 
     @Column(name = "description")
@@ -96,6 +95,26 @@ public class Customer {
         this.customerLoginInfo = customerLoginInfo;
         this.createdAt = createdAt;
     }
+
+            public Customer(String name2, String email2, String phone2, String address2, String city2, String state2,
+            String country2, String description2, String position2, String twitter2, String facebook2, 
+            String youtube2, LocalDateTime createdAt2) {
+        // Initialisation des attributs de la classe avec les valeurs passées en paramètre
+        this.name = name2;
+        this.email = email2;
+        this.phone = phone2;
+        this.address = address2;
+        this.city = city2;
+        this.state = state2;
+        this.country = country2;
+        this.description = description2;
+        this.position = position2;
+        this.twitter = twitter2;
+        this.facebook = facebook2;
+        this.youtube = youtube2;
+        this.createdAt = createdAt2;
+        }
+
 
     public Integer getCustomerId() {
         return customerId;

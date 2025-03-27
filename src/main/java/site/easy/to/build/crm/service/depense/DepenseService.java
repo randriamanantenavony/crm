@@ -43,8 +43,25 @@ public class DepenseService {
     }
     
     public void deleteDepense(Integer depenseId) {
-        // Supprime la dépense de la base de données en fonction de son ID
         depenseRepository.deleteById(depenseId);
+    }
+
+    @Transactional
+    public void deleteDepenseByTicketId(Integer ticketId) {
+        depenseRepository.deleteByTicketId(ticketId);
+    } 
+
+    @Transactional
+    public void deleteDepenseByLeadId(Integer ticketId) {
+        depenseRepository.deleteByLeadId(ticketId);
+    } 
+
+    public void updateMontantParTicket(int ticketId, double montant) {
+        depenseRepository.updateMontantByTicketId(montant, ticketId);
+    }
+
+    public void updateMontantByLeadId(double montant, int leadId) {
+        depenseRepository.updateMontantByLeadId(montant, leadId);
     }
     
 }

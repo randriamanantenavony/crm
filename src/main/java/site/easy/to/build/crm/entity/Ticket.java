@@ -16,21 +16,15 @@ public class Ticket {
     private int ticketId;
 
     @Column(name = "subject")
-    @NotBlank(message = "Subject is required")
     private String subject;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "status")
-    @NotBlank(message = "Status is required")
-    @Pattern(regexp = "^(open|assigned|on-hold|in-progress|resolved|closed|reopened|pending-customer-response|escalated|archived)$", message = "Invalid status")
     private String status;
 
     @Column(name = "priority")
-    @NotBlank(message = "Priority is required")
-    @Pattern(regexp = "^(low|medium|high|closed|urgent|critical)$", message = "Invalid priority")
-
     private String priority;
 
     @ManyToOne
@@ -41,12 +35,13 @@ public class Ticket {
     @JoinColumn(name = "employee_id")
     private User employee;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
 
     public Ticket() {
     }

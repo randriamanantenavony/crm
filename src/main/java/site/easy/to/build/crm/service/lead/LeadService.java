@@ -19,7 +19,7 @@ public interface LeadService {
     public Lead save(Lead lead);
 
     public void delete(Lead lead);
-
+    
     public List<Lead> getRecentLeads(int mangerId, int limit);
     public List<Lead> getCustomerLeads(int customerId);
 
